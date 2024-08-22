@@ -35,7 +35,7 @@
 // TODO: Add values for below variables
 #define NS 128       // Number of samples in LUT
 #define TIM2CLK 8000000  // STM Clock frequency
-#define F_SIGNAL 100 // Frequency of output analog signal
+#define F_SIGNAL 250 // Frequency of output analog signal
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -155,10 +155,10 @@ int main(void)
 
   // TODO: Write current waveform to LCD ("Sine")
 
-  delay(3000);
+ HAL_Delay(3000);
+  init_LCD(); // Initialize LCD
   lcd_command(CLEAR);
-  lcd_putstring("Sine");
-
+  lcd_putstring("-Sine Wave-");
 
   // TODO: Enable DMA (start transfer from LUT to CCR)
 
@@ -415,17 +415,17 @@ void EXTI0_1_IRQHandler(void)
 				case 0:
 					selected_LUT = Sin_LUT;
 					lcd_command(CLEAR);
-					lcd_putstring("Sine");
+					lcd_putstring("-Sine Wave-");
 					break;
 				case 1:
 					selected_LUT = saw_LUT;
 					lcd_command(CLEAR);
-					lcd_putstring("Sawtooth");
+					lcd_putstring("-Sawtooth Wave-");
 					break;
 				case 2:
 					selected_LUT = triangle_LUT;
 					lcd_command(CLEAR);
-					lcd_putstring("Triangle");
+					lcd_putstring("-Triangle Wave-");
 					break;
 			}
 
