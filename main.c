@@ -134,6 +134,9 @@ int main(void)
   init_LCD();
   MX_DMA_Init();
   MX_TIM2_Init();
+
+  __HAL_TIM_SET_AUTORELOAD(&htim2, TIM2_Ticks);
+
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
