@@ -397,18 +397,49 @@ void EXTI0_1_IRQHandler(void)
 		{
 			last_interrupt_time = current_time;
 
+			// Abort the current DMA transfer
+			__HAL_TIM_DISABLE_DMA(1&htim2, TIM_DMA_CC1);
+			HAL_DMA_Abort_IT(&hdma_tim2_ch1);
 
+			// Switch between LUTs using a static variable to keep track of the current waveform
+			static int waveform = 0;
+			waveform = (waveform + 1) % 3;
 
+			uint32_t *selected_LUT = Sin_LUT; // Default to sine wave
+
+			switch (waveform)
+			{
+				case 0:
+					selected_LUT = Sin_LUT;
+					lcd_command(CLEAR);
+					lcd_putstring("Sine");
+					break;
+				case 1:
+					selected_LUT = saw_LUT;
+					lcd_command(CLEAR);
+					lcd_putstring("Sawtooth");
+					break;
+				case 2:
+					selected_LUT = triangle_LUT;
+					lcd_command(CLEAR);
+					lcd_putstring("Triangle");
+					break;
+			}
+
+			// Restart the DMA transfer with the new LUT
+			HAL_DMA_Start_IT(&hdma_tim2_ch1, (uint32_t)selected_LUT, DestAddress, NS);
+			__HAL_TIM_ENABLE_DMA(&htim2, TIM_DMA_CC1); // Re-enable DMA requests for TIM2
 
 		}
 
-
-
-
-
 	HAL_GPIO_EXTI_IRQHandler(Button0_Pin); // Clear interrupt flags
+
 }
 /* USER CODE END 4 */
+
+
+
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
