@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include <lcd_stm32f0.c>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -35,7 +35,7 @@
 // TODO: Add values for below variables
 #define NS 128       // Number of samples in LUT
 #define TIM2CLK 8000000  // STM Clock frequency
-#define F_SIGNAL 250 // Frequency of output analog signal
+#define F_SIGNAL 10 // Frequency of output analog signal
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -401,7 +401,7 @@ void EXTI0_1_IRQHandler(void)
 			last_interrupt_time = current_time;
 
 			// Abort the current DMA transfer
-			__HAL_TIM_DISABLE_DMA(1&htim2, TIM_DMA_CC1);
+			__HAL_TIM_DISABLE_DMA(&htim2, TIM_DMA_CC1);
 			HAL_DMA_Abort_IT(&hdma_tim2_ch1);
 
 			// Switch between LUTs using a static variable to keep track of the current waveform
